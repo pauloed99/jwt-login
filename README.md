@@ -2,12 +2,12 @@
 
 # Sobre o projeto
 
-Big Game Survey é uma aplicação full stack web e mobile construída durante a 1ª edição da **Semana DevSuperior** (#sds1), evento organizado pela [DevSuperior](https://devsuperior.com "Site da DevSuperior").
+Sistema de Login desenvolvido com o Framework Spring Boot. 
 
-A aplicação consiste em uma pesquisa de preferência de games, onde os dados são coletados no app mobile, e depois são listados no app web, que também apresenta um dashboard com gráficos baseados nestes dados.
+Ademais, para o desenvolvimento dele foi utlizado o JWT (Json Web Token) como método de autenticação e autorização e o banco de dados MySQL para armazenar os dados dos usuários criados na API REST.
 
 ## Modelo conceitual
-![Modelo Conceitual](https://github.com/pauloed99/jwt-login/tree/master/src/main/resources/static/readme/database-representation)
+![Modelo Conceitual](https://github.com/pauloed99/jwt-login/blob/master/src/main/resources/static/readme/database-representation.png)
 
 # Tecnologias utilizadas
 - Java
