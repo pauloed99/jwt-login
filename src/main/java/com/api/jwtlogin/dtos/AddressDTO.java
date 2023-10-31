@@ -8,11 +8,11 @@ import lombok.Data;
 public class AddressDTO {
     private Long id;
     @NotBlank(message = "The cep is required!")
-    private String cep;
+    private String zip;
     @NotBlank(message = "The street is required!")
     private String street;
     @NotBlank(message = "The neighbourhood is required!")
-    private String neighbourhood;
+    private String neighborhood;
     @NotBlank(message = "The city is required!")
     private String city;
     @NotBlank(message = "The uf is required!")

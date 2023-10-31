@@ -9,7 +9,7 @@ public class UserResponseDTO {
     private Long id;
     private String email;
     private String name;
-    @JsonFormat(pattern = "dd/MM/yyyy")
-    private LocalDate BirthDate;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate birthDate;
     private AddressDTO address;
 }

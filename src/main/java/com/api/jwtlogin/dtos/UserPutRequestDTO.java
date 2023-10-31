@@ -11,7 +11,6 @@ public class UserPutRequestDTO {
     private Long id;
     @NotBlank(message = "The name is required!")
     private String name;
-    @NotBlank(message = "The password is required!")
     private String password;
     @NotNull(message = "The birthDate is required!")
     private LocalDate birthDate;

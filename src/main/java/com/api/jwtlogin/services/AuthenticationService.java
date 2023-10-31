@@ -14,6 +14,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -23,6 +24,7 @@ public class AuthenticationService {
     private UserRepository userRepository;
     private TokenService tokenService;
     private ModelMapper modelMapper;
+    private PasswordEncoder passwordEncoder;
 
     public AuthenticationResponseDTO login(AuthenticationRequestDTO authenticationRequestDTO) {
         var usernamePassword = new UsernamePasswordAuthenticationToken(authenticationRequestDTO.getEmail()
@@ -37,7 +39,7 @@ public class AuthenticationService {
             throw new BadRequestException(UsersEnum.USER_EMAIL_ALREADY_USED_EXCEPTION.getMessage());
         }
 
-        String encryptedPassword = new BCryptPasswordEncoder().encode(userPostRequestDTO.getPassword());
+        String encryptedPassword = passwordEncoder.encode(userPostRequestDTO.getPassword());
         userPostRequestDTO.setPassword(encryptedPassword);
         User userToBeSaved = modelMapper.map(userPostRequestDTO, User.class);
 

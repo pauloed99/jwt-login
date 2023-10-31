@@ -8,8 +8,10 @@ import com.api.jwtlogin.exceptions.BadRequestException;
 import com.api.jwtlogin.exceptions.RecordNotFoundException;
 import com.api.jwtlogin.models.User;
 import com.api.jwtlogin.repositories.UserRepository;
+import com.api.jwtlogin.security.TokenService;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,22 +19,39 @@ import org.springframework.stereotype.Service;
 public class UserService {
     private UserRepository userRepository;
     private ModelMapper modelMapper;
+    private TokenService tokenService;
+    private PasswordEncoder passwordEncoder;
 
-    public UserResponseDTO getUser(Long id) {
-        User user = userRepository.findById(id).orElseThrow(
+    public UserResponseDTO getUser(String token) {
+        token = token.replace("Bearer ", "");
+        String tokenEmail = tokenService.validateToken(token);
+        User user = userRepository.findUserByEmail(tokenEmail).orElseThrow(
                 () -> new RecordNotFoundException(UsersEnum.USER_NOT_FOUND_EXCEPTION.getMessage())
         );
         return modelMapper.map(user, UserResponseDTO.class);
     }
 
-    public void updateUser(UserPutRequestDTO userPutRequestDTO) {
-        getUser(userPutRequestDTO.getId());
+    public void updateUser(UserPutRequestDTO userPutRequestDTO, String token) {
+        token = token.replace("Bearer ", "");
+        String tokenEmail = tokenService.validateToken(token);
+        User user = userRepository.findUserByEmail(tokenEmail).orElseThrow(
+                () -> new RecordNotFoundException(UsersEnum.USER_NOT_FOUND_EXCEPTION.getMessage())
+        );
+
+        String password = userPutRequestDTO.getPassword();
+
+        if(password != null && !password.isEmpty()) {
+          userPutRequestDTO.setPassword(passwordEncoder.encode(password));
+        } else {
+            userPutRequestDTO.setPassword(user.getPassword());
+        }
+
         User userToBeUpdated = modelMapper.map(userPutRequestDTO, User.class);
+        userToBeUpdated.setEmail(tokenEmail);
         userRepository.save(userToBeUpdated);
     }
 
-    public void deleteUser(Long id) {
-        getUser(id);
-        userRepository.deleteById(id);
+    public void deleteUser(String token) {
+        userRepository.deleteById(getUser(token).getId());
     }
 }
